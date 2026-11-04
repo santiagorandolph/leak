@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Find the subscriptions quietly draining your account. Drop in a bank CSV — everything runs in your browser.">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#080d0c">
+  <title>Leak — find the subscriptions hiding in your bank statement</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="page">
+    <header class="site-header">
+      <a class="wordmark" href="#" id="home" aria-label="Leak — start over">
+        <span class="drop" aria-hidden="true"></span>leak<span class="dot">.</span>
+      </a>
+      <span class="badge">local-only</span>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="hero">
+        <p class="eyebrow">A quiet money tool</p>
+        <h1>Find the subscriptions quietly <em>draining</em> your account.</h1>
+        <p class="lede">
+          Drop in a bank CSV. Leak finds the charges that repeat every month and adds up
+          what they cost you a year. Nothing is uploaded, stored, or tracked.
+        </p>
+
+        <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Drop a CSV file here, or press Enter to choose a file">
+          <div class="dropzone-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5"/>
+              <path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>
+            </svg>
+          </div>
+          <p class="dropzone-title">Drop your bank CSV here</p>
+          <p class="dropzone-sub">or <span class="link-look">choose a file</span></p>
+          <p class="dropzone-hint">3+ months of transactions works best · .csv, .txt</p>
+          <input type="file" id="file" accept=".csv,.txt,text/csv,text/plain" hidden>
+        </div>
+
+        <div class="hero-actions">
+          <button class="button primary" id="pick" type="button">Choose CSV</button>
+          <button class="button ghost" id="sample" type="button">Try sample data</button>
+        </div>
+
+        <p class="privacy-line">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <rect x="4" y="10" width="16" height="10" rx="2"/>
+            <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+          </svg>
+          Your file is parsed in this tab and never leaves your device.
+        </p>
+      </section>
+
+      <section class="results" id="results" hidden aria-live="polite" tabindex="-1">
+        <div class="results-head">
+          <div>
+            <h2>What we found</h2>
+            <p class="results-sub" id="scan-note"></p>
+          </div>
+          <div class="currency">
+            <label for="currency">Currency</label>
+            <select id="currency">
+              <option value="USD">USD $</option>
+              <option value="EUR">EUR €</option>
+              <option value="GBP">GBP £</option>
+              <option value="CAD">CAD $</option>
+              <option value="AUD">AUD $</option>
+              <option value="JPY">JPY ¥</option>
+              <option value="INR">INR ₹</option>
+              <option value="BRL">BRL R$</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="stats" id="stats"></div>
+
+        <div id="duplicates" class="duplicates"></div>
+
+        <div id="empty" class="empty" hidden>
+          <h3>Nothing recurring jumped out.</h3>
+          <p>That can be good news — or the export may be too short. Three months of transactions gives the detector enough pattern to work with.</p>
+        </div>
+
+        <ul class="charge-list" id="list"></ul>
+
+        <div class="results-footer">
+          <button class="button ghost" id="reset" type="button">Check another file</button>
+          <p>Estimates are based on the median amount and interval. Always verify with your bank.</p>
+        </div>
+      </section>
+
+      <section class="error" id="error" role="alert" hidden>
+        <h2>That file didn't work</h2>
+        <p id="error-text"></p>
+        <button class="button ghost" id="error-reset" type="button">Try another file</button>
+      </section>
+
+      <section class="how" aria-labelledby="how-title">
+        <h2 id="how-title">How it works</h2>
+        <ol class="how-grid">
+          <li>
+            <span class="step">01</span>
+            <h3>Export a CSV</h3>
+            <p>Most banks have a “Download transactions” or “Export CSV” button in their activity page.</p>
+          </li>
+          <li>
+            <span class="step">02</span>
+            <h3>Drop it here</h3>
+            <p>Columns are detected automatically. Amounts, dates, and merchant names are normalized in memory.</p>
+          </li>
+          <li>
+            <span class="step">03</span>
+            <h3>See the yearly cost</h3>
+            <p>Charges that repeat monthly or less often are grouped and annualized, so $15.49/month reads as $185/year.</p>
+          </li>
+        </ol>
+      </section>
+
+      <section class="limits">
+        <h2>What it does — and doesn't — catch</h2>
+        <p>
+          Leak looks for the same merchant charging a similar amount on a monthly, bimonthly,
+          quarterly, semiannual, or yearly rhythm. Weekly habits like coffee runs are deliberately
+          ignored. One-time annual charges that appear only once in your export can't be detected,
+          which is why a longer statement works better.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Built so you can see where the money leaks. Not financial advice.</p>
+      <p class="footer-dim">No server, no analytics, no cookies. Close the tab and the data is gone.</p>
+    </footer>
+  </div>
+
+  <noscript>
+    <div class="noscript">Leak needs JavaScript to parse your file locally. Nothing is sent anywhere either way.</div>
+  </noscript>
+
+  <script src="detector.js"></script>
+  <script src="sample-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
