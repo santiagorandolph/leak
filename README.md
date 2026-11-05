@@ -2,6 +2,8 @@
 
 Find the subscriptions quietly draining your account.
 
+**Live:** https://santiagorandolph.github.io/leak/
+
 Drop in a bank CSV and Leak groups charges that repeat monthly or less often,
 then adds up what each one costs per year. Everything runs in the browser:
 no upload, no account, no analytics, no storage.
